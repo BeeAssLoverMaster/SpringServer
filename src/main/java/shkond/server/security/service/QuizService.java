@@ -4,7 +4,6 @@ package shkond.server.security.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import shkond.server.model.articles.Article;
@@ -23,9 +22,9 @@ import shkond.server.repository.quizzes.AnswerRepository;
 import shkond.server.repository.quizzes.QuestionImageRepository;
 import shkond.server.repository.quizzes.QuestionRepository;
 import shkond.server.repository.quizzes.QuizRepository;
-import shkond.server.request.AddArticleRequest;
-import shkond.server.request.AddQuestionRequest;
-import shkond.server.request.AnswerRequest;
+import shkond.server.request.articles.AddArticleRequest;
+import shkond.server.request.quizzes.AddQuestionRequest;
+import shkond.server.request.quizzes.AnswerRequest;
 
 import java.util.Optional;
 
@@ -59,16 +58,18 @@ public class QuizService {
     private String questionDir;
 
     public Article addArticle(MultipartFile[] files, AddArticleRequest request) {
-        Optional<ArtGenre> artGenreOptional = artGenreRepository.findById(request.getGenreId());
-        Optional<ArticleCategory> articleCategoryOptional = articleCategoryRepository.findById(request.getArticleCategoryId());
-
-
+        Optional<ArtGenre> artGenreOptional = request.getGenreId() != null ?
+                artGenreRepository.findById(request.getGenreId()) :
+                Optional.empty();
+        Optional<ArticleCategory> articleCategoryOptional = request.getArticleCategoryId() != null ?
+                articleCategoryRepository.findById(request.getArticleCategoryId()) :
+                Optional.empty();
 
         Article addArticle = new Article(
                 request.getTitle(),
                 request.getText(),
-                articleCategoryOptional.get(),
-                artGenreOptional.get()
+                articleCategoryOptional.orElse(null),  // Use orElse to handle Optional properly
+                artGenreOptional.orElse(null)
         );
 
         Article article = articleRepository.save(addArticle);
@@ -97,7 +98,11 @@ public class QuizService {
         return quizRepository.save(quiz);
     }
 
-    public Boolean addQuestions(MultipartFile[] files, AddQuestionRequest[] questionRequestsList, Quiz quiz) {
+    public Boolean addQuestions(
+            MultipartFile[] files,
+            AddQuestionRequest[] questionRequestsList,
+            Quiz quiz
+    ) {
         for (AddQuestionRequest request : questionRequestsList) {
             Question question = new Question(
                     request.getQuestion(),
@@ -115,7 +120,7 @@ public class QuizService {
                         answerReq.isCorrect()
                 );
 
-                Answer savedAnswer = answerRepository.save(answer);
+                answerRepository.save(answer);
             }
 
             if (files != null && files.length > 0) {

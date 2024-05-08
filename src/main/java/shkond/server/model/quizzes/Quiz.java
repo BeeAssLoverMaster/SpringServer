@@ -1,10 +1,15 @@
 package shkond.server.model.quizzes;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import shkond.server.model.Artist;
 import shkond.server.model.articles.Article;
 import shkond.server.model.arts.ArtGenre;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "quizzes")
 public class Quiz {
     @Id
@@ -20,6 +25,10 @@ public class Quiz {
     @JoinColumn(name = "article_id", referencedColumnName = "article_id")
     private Article article;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artist_id")
+    private Artist artist;
+
     public Quiz(){}
 
     public Quiz(ArtGenre artGenre, Article article) {
@@ -27,23 +36,4 @@ public class Quiz {
         this.article = article;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public ArtGenre getArtGenre() {
-        return artGenre;
-    }
-
-    public void setArtGenre(ArtGenre artGenre) {
-        this.artGenre = artGenre;
-    }
-
-    public Article getArticle() {
-        return article;
-    }
-
-    public void setArticle(Article article) {
-        this.article = article;
-    }
 }

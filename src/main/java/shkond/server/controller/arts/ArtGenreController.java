@@ -22,6 +22,10 @@ import java.util.List;
 public class ArtGenreController {
     @Autowired
     ArtGenreRepository artGenreRepository;
+
+    /* Web:
+    * EditArticle
+    */
     @GetMapping("/genres/get_all")
     public ResponseEntity<?> getAllGenres() {
         List<ArtGenre> genreList = artGenreRepository.findAll();
@@ -50,6 +54,9 @@ public class ArtGenreController {
         return ResponseEntity.ok(jsonString);
     }
 
+    /* Web:
+    * ArticleAndQuiz
+    */
     @GetMapping("/genres/get")
     public ResponseEntity<?> getGenresByTypeId(@RequestParam(name = "typeId") Long typeId) {
         List<ArtGenre> genreList = artGenreRepository.findAllByArtTypeId(typeId);

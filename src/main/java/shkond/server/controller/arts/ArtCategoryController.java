@@ -29,7 +29,9 @@ public class ArtCategoryController {
     @Autowired
     UserRepository userRepository;
 
-    //Для web'a
+    /* Web:
+    * ArticleAndQuiz
+    */
     @GetMapping("/categories/get_all")
     public ResponseEntity<?> getAllCategories() {
         List<ArtCategory> categoryList = artCategoryRepository.findAll();

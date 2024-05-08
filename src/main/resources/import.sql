@@ -10,47 +10,108 @@
 INSERT INTO art_categories (category_name, category_image) VALUES ('Visual arts', 'image');
 INSERT INTO art_categories (category_name, category_image) VALUES ('Musical arts', 'image');
 
-INSERT INTO art_types (type_name, type_image, art_category_id) VALUES ('Painting', 'image', 1);
-INSERT INTO art_types (type_name, type_image, art_category_id) VALUES ('Graphic', 'image', 1);
-INSERT INTO art_types (type_name, type_image, art_category_id) VALUES ('Art History', 'image', 1);
-INSERT INTO art_types (type_name, type_image, art_category_id) VALUES ('Solfedgio', 'image', 2);
+INSERT INTO art_types (type_name, type_image, art_category_id) VALUES ('Painting', 'Painting_image', 1);
+INSERT INTO art_types (type_name, type_image, art_category_id) VALUES ('Graphic', 'Graphic_image', 1);
+INSERT INTO art_types (type_name, type_image, art_category_id) VALUES ('Architecture', 'Architecture_image', 1);
+
+INSERT INTO art_types (type_name, type_image, art_category_id) VALUES ('Piano', 'Piano_image', 2);
+INSERT INTO art_types (type_name, type_image, art_category_id) VALUES ('Violin', 'Violin_image', 2);
+INSERT INTO art_types (type_name, type_image, art_category_id) VALUES ('Guitar', 'Guitar_image', 2);
 --
-INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Portrait', 'image', 1);
-INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Landscape', 'image', 1);
-INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Seascape', 'image', 1);
---
-INSERT INTO artists (artist_name, artist_image) VALUES ('Leonardo di ser Piero da Vinci', 'image');
-INSERT INTO artists (artist_name, artist_image) VALUES ('Donato di Niccolò di Betto Bardi', 'image');
-INSERT INTO artists (artist_name, artist_image) VALUES ('Michelangelo di Lodovico Buonarroti Simoni', 'image');
-INSERT INTO artists (artist_name, artist_image) VALUES ('Raffaello Sanzio', 'image');
---
-INSERT INTO artist_genres (genre_id, artist_id) VALUES (1, 1);
-INSERT INTO artist_genres (genre_id, artist_id) VALUES (1, 2);
-INSERT INTO artist_genres (genre_id, artist_id) VALUES (1, 3);
-INSERT INTO artist_genres (genre_id, artist_id) VALUES (1, 4);
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Portrait', 'Portrait_image', 1);
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Landscape', 'Landscape_image', 1);
+
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('The Engraving', 'The_Engraving_image', 2);
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Print', 'Print_image',2);
+
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Veduta', 'Veduta_image', 3);
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Ruins', 'Ruins_image', 3);
+
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Classical', 'Classical_image', 4);
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Jazz', 'Jazz_image', 4);
+
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Classical', 'Classical_image', 5);
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Folk', 'Folk_image', 5);
+
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Classical Guitar', 'Classical_Guitar_image', 6);
+INSERT INTO art_genres (genre_name, genre_image, art_type_id) VALUES ('Rock', 'Rock_image', 6);
 --
 INSERT INTO article_categories (category_name) VALUES ('Representatives of the arts');
 INSERT INTO article_categories (category_name) VALUES ('The history of the genre');
 INSERT INTO article_categories (category_name) VALUES ('Technique of execution');
 INSERT INTO article_categories (category_name) VALUES ('Bio about artist');
 --
-INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Article Title', 'First Article Text', 1, 1);
-INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second Article Title', 'Second Article Text', 4, 1);
-INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Third Article Title', 'Third Article Text', 2, 2);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Portrait Title', 'First Portrait Text', 1, 1);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Bio about Leo', 'Second Portrait Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Landscape Title', 'First Landscape Text', 2, 2);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Bio about Donato Title', 'Second Landscape Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First The Engraving Title', 'First The Engraving Text', 2, 3);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second The Engraving Title', 'Second The Engraving Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Print Title', 'First Print Text', 2, 4);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second Print Title', 'Second Print Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Veduta Title', 'First Veduta Text', 2, 5);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second Veduta Title', 'Second Veduta Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Ruins Title', 'First Ruins Text', 2, 6);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second Ruins Title', 'Second Ruins Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Classical Title', 'First Classical Text', 2, 7);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second Classical Title', 'Second Classical Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Jazz Title', 'First Jazz Text', 2, 8);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second Jazz Title', 'Second Jazz Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Classical Title', 'First Classical Text', 2, 9);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second Classical Title', 'Second Classical Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Folk Title', 'First Folk Text', 2, 10);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second Folk Title', 'Second Folk Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Classical Guitar Title', 'First Classical Guitar Text', 2, 11);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second Classical Guitar Title', 'Second Classical Guitar Text', 4, null);
+
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('First Rock Title', 'First Rock Text', 2, 12);
+INSERT INTO articles (title, text, article_category_id, genre_id) VALUES ('Second Rock Title', 'Second Rock Text', 4, null);
 --
-INSERT INTO artist_articles (artist_id, article_id) VALUES (1, 1);
-INSERT INTO artist_articles (artist_id, article_id) VALUES (2, 1);
-INSERT INTO artist_articles (artist_id, article_id) VALUES (3, 1);
-INSERT INTO artist_articles (artist_id, article_id) VALUES (4, 2);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Leonardo di ser Piero da Vinci', 'LeonardoDaVinci.png', 2);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Donato di Niccolo di Betto Bardi', 'DonatoDiNiccolo.png', 4);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Michelangelo di Lodovico Buonarroti Simoni', 'Michelangelo.png', 6);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Raffaello Sanzio', 'Raffaello.png', 8);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Vincent Van Gogh', 'VincentVanGogh.png', 10);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Pablo Picasso', 'PabloPicasso.png', 12);
+
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Johann Sebastian Bach', 'Bach.png', 14);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Wolfgang Amadeus Mozart', 'Mozart.png', 16);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Ludwig van Beethoven', 'Beethoven.png', 18);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Frederic Chopin', 'FredericChopin.png', 20);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('Pyotr Ilyich Tchaikovsky', 'Thaikovsky.png', 22);
+INSERT INTO artists (artist_name, artist_image, article_id) VALUES ('George Gershwin', 'Gershwin.png', 24);
 --
-INSERT INTO article_images (image_name, article_id, image_description) VALUES ('image', 1, 'photo')
-INSERT INTO article_images (image_name, article_id, image_description) VALUES ('image', 1, 'photo')
-INSERT INTO article_images (image_name, article_id, image_description) VALUES ('image', 1, 'photo')
-INSERT INTO article_images (image_name, article_id, image_description) VALUES ('image', 2, 'photo')
+INSERT INTO article_images (image_name, article_id, image_description) VALUES ('Article_1_image', 1, 'photo_1')
+INSERT INTO article_images (image_name, article_id, image_description) VALUES ('Article_1_image', 1, 'photo_2')
+INSERT INTO article_images (image_name, article_id, image_description) VALUES ('Article_1_image', 1, 'photo_3')
+
+INSERT INTO article_images (image_name, article_id, image_description) VALUES ('Article_2_image', 6, 'photo_1')
+INSERT INTO article_images (image_name, article_id, image_description) VALUES ('Article_2_image', 6, 'photo_2')
+
+INSERT INTO article_images (image_name, article_id, image_description) VALUES ('Article_2_image', 9, 'photo_1')
 --
-INSERT INTO quizzes (art_genre_id, article_id) VALUES (1, 1);
-INSERT INTO quizzes (art_genre_id, article_id) VALUES (1, 2);
-INSERT INTO quizzes (art_genre_id, article_id) VALUES (2, 3);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (1, 1, 1);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (2, 2, null);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (3, 3, null);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (4, 4, null);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (5, 5, null);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (6, 6, null);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (7, 7, null);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (8, 8, null);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (9, 9, null);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (10, 10, null);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (11, 11, null);
+INSERT INTO quizzes (art_genre_id, article_id, artist_id) VALUES (12, 12, null);
 --
 INSERT INTO questions (question, quiz_id, question_value) VALUES ('Kto polychil zarplaty?', 1, 20);
 --

@@ -28,6 +28,7 @@ public class ArticleImageController {
     @Autowired
     private ArticleImageRepository articleImageRepository;
 
+    /* Никем не используется */
     @GetMapping("/article_images/get")
     public ResponseEntity<?> getAllArticleImagesByArticleId(@RequestParam(name = "articleId") Long articleId) {
         Optional<Article> article = articleRepository.findById(articleId);

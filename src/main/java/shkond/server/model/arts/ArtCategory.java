@@ -1,10 +1,14 @@
 package shkond.server.model.arts;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "art_categories")
 public class ArtCategory {
     @Id
@@ -17,25 +21,5 @@ public class ArtCategory {
 
     @Column(name = "category_image", nullable = true)
     private String image;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 }
 

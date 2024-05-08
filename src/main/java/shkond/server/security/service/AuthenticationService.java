@@ -10,22 +10,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import shkond.server.dto.JwtAuthenticationResponse;
-import shkond.server.model.arts.ArtCategory;
 import shkond.server.model.enums.EnumRole;
 import shkond.server.model.users.Role;
 import shkond.server.model.users.User;
 import shkond.server.repository.arts.ArtCategoryRepository;
 import shkond.server.repository.users.RoleRepository;
 import shkond.server.repository.users.UserRepository;
-import shkond.server.request.SignInRequest;
-import shkond.server.request.SignUpRequest;
+import shkond.server.request.users.SignInRequest;
+import shkond.server.request.users.SignUpRequest;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

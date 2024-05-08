@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
     List<Quiz> findAllByArtGenreId(Long id);
+    List<Quiz> findAllByArtistId(Long id);
 }

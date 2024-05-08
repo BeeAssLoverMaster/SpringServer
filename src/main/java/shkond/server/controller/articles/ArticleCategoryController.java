@@ -22,6 +22,9 @@ public class ArticleCategoryController {
     @Autowired
     private ArticleCategoryRepository articleCategoryRepository;
 
+    /* Web:
+    * ArticleAndQuiz
+    */
     @GetMapping("/art_categories/get_all")
     public ResponseEntity<?> getAllArticleCategories() {
         List<ArticleCategory> articleCategoryList = articleCategoryRepository.findAll();

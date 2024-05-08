@@ -1,25 +1,25 @@
 package shkond.server.controller.quizzes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import shkond.server.model.articles.Article;
-import shkond.server.model.articles.ArticleCategory;
-import shkond.server.model.articles.ArticleImage;
-import shkond.server.model.arts.ArtGenre;
 import shkond.server.model.quizzes.Quiz;
 import shkond.server.repository.quizzes.QuizRepository;
-import shkond.server.request.AddArticleRequest;
-import shkond.server.request.AddQuestionRequest;
+import shkond.server.request.articles.AddArticleRequest;
+import shkond.server.request.quizzes.AddQuestionRequest;
 import shkond.server.security.service.QuizService;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,8 +32,9 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
+    /* Никем не используется */
     @GetMapping("/quiz/get_all")
-    public ResponseEntity<?> getAllQuizzes(){
+    public ResponseEntity<?> getAllQuizzes() {
         List<Quiz> quizList = quizRepository.findAll();
 
         JsonObject mainJsonObject = new JsonObject();
@@ -56,6 +57,7 @@ public class QuizController {
         return ResponseEntity.ok(jsonString);
     }
 
+    /* Никем не используется */
     @GetMapping("/quiz/get")
     public ResponseEntity<?> getQuizzesByGenreId(@RequestParam(name = "genreId") Long genreId) {
         List<Quiz> quizList = quizRepository.findAllByArtGenreId(genreId);
@@ -81,19 +83,21 @@ public class QuizController {
         return ResponseEntity.ok(jsonString);
     }
 
+    /* Web:
+     * ArticleAndQuiz*/
     @PostMapping("/quiz/add")
     public ResponseEntity<?> addQuiz(
-            @RequestPart("articleFiles") MultipartFile[] articleFiles,
-            @RequestPart("questionFiles") MultipartFile[] questionFiles,
+            @RequestPart(value = "articleFiles", required = false) MultipartFile[] articleFiles,
             @RequestPart("articleRequest") AddArticleRequest articleRequest,
+            @RequestPart(value = "questionFiles", required = false) MultipartFile[] questionFiles,
             @RequestPart("questionRequest") AddQuestionRequest[] questionRequest
-            ) {
-        Article article = quizService.addArticle(articleFiles, articleRequest);
+    ) {
 
+        Article article = quizService.addArticle(articleFiles, articleRequest);
         Quiz quiz = quizService.createQuiz(article);
 
         quizService.addQuestions(questionFiles, questionRequest, quiz);
 
-        return ResponseEntity.ok("Ахуеешь");
+        return ResponseEntity.ok("Статья и викторина сохранены");
     }
 }

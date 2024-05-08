@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shkond.server.dto.JwtAuthenticationResponse;
-import shkond.server.request.SignInRequest;
-import shkond.server.request.SignUpRequest;
+import shkond.server.request.users.SignInRequest;
+import shkond.server.request.users.SignUpRequest;
 import shkond.server.security.service.AuthenticationService;
 
 import java.io.IOException;

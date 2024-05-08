@@ -1,9 +1,16 @@
 package shkond.server.model.articles;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import shkond.server.model.arts.ArtGenre;
+import shkond.server.repository.article.ArticleCategoryRepository;
+import shkond.server.repository.arts.ArtCategoryRepository;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "articles")
 public class Article {
 
@@ -41,43 +48,4 @@ public class Article {
         this.artGenre = artGenre;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public ArticleCategory getArticleCategory() {
-        return articleCategory;
-    }
-
-    public void setArticleCategory(ArticleCategory articleCategory) {
-        this.articleCategory = articleCategory;
-    }
-
-    public ArtGenre getArtGenre() {
-        return artGenre;
-    }
-
-    public void setArtGenre(ArtGenre artGenre) {
-        this.artGenre = artGenre;
-    }
 }
