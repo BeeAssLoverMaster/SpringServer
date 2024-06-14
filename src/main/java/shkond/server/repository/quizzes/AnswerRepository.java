@@ -5,5 +5,9 @@ import org.springframework.stereotype.Repository;
 import shkond.server.model.Artist;
 import shkond.server.model.quizzes.Answer;
 
+import java.util.List;
+
 @Repository
-public interface AnswerRepository extends JpaRepository<Answer, Long> { }
+public interface AnswerRepository extends JpaRepository<Answer, Long> {
+    List<Answer> findAllByQuestionId(Long id);
+}

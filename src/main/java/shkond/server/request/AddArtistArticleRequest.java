@@ -5,6 +5,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
+/* Данные для добавления биографической статьи */
 public class AddArtistArticleRequest {
     private String title;
     private String biographyText;

@@ -15,36 +15,32 @@ import shkond.server.repository.article.ArticleCategoryRepository;
 
 import java.util.List;
 
-@Controller
+
+@Controller // Устанавливает класс, как контроллер Spring
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api") // Задаёт базовый URL для всех методов в контроллере
+/* Контроллер для категорий статьи */
 public class ArticleCategoryController {
-    @Autowired
+    @Autowired // Внедряет зависимости
     private ArticleCategoryRepository articleCategoryRepository;
 
-    /* Web:
-    * ArticleAndQuiz
-    */
-    @GetMapping("/art_categories/get_all")
+    /**
+     * Получение всех категорий статей
+     * @return JSON-объект, содержащий все статьи
+     */
+    @GetMapping("/article_categories/get_all") // Обрабатывает GET-запросы по указанной URL
     public ResponseEntity<?> getAllArticleCategories() {
         List<ArticleCategory> articleCategoryList = articleCategoryRepository.findAll();
-
         JsonObject mainJsonObject = new JsonObject();
         JsonArray jsonArray = new JsonArray();
-
         for (ArticleCategory category : articleCategoryList) {
             JsonObject jsonObject = new JsonObject();
-
             jsonObject.addProperty("id", category.getId());
             jsonObject.addProperty("categoryName", category.getName());
-
             jsonArray.add(jsonObject);
         }
-
         mainJsonObject.add("articleCategories", jsonArray); // Добавляем массив в основной JsonObject
-
         String jsonString = mainJsonObject.toString();
-
         return ResponseEntity.ok(jsonString);
     }
 }

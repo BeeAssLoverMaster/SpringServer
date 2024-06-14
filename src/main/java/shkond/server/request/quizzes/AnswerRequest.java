@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
+/* Данные для добавления ответов*/
 public class AnswerRequest {
     private String answer;
-    @JsonProperty
+    @JsonProperty // Для корректной десериализации поля при работе с JSON
     private boolean isCorrect;
 }

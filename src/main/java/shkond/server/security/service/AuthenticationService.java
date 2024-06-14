@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import shkond.server.dto.JwtAuthenticationResponse;
+import shkond.server.model.arts.ArtCategory;
 import shkond.server.model.enums.EnumRole;
 import shkond.server.model.users.Role;
 import shkond.server.model.users.User;
@@ -24,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,8 +58,15 @@ public class AuthenticationService {
     @Value("${image.assets-dir}")
     private String assetDir;
 
+    public String getUsernameByEmail(String email) {
+        User user = userService.getByEmail(email);
+        return user != null ? user.getUsername() : null;
+    }
 
     public JwtAuthenticationResponse signUp(SignUpRequest request) throws IOException {
+
+        ArtCategory artCategory = artCategoryRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("ArtCategory not found"));
 
         List<Role> rolesList = new ArrayList<>();
 
@@ -81,7 +93,9 @@ public class AuthenticationService {
                 passwordEncoder.encode(request.getPassword()),
                 defaultImage,
                 0,
-                rolesList);
+                rolesList,
+                artCategory
+                );
 
         userService.create(user);
 
@@ -89,17 +103,19 @@ public class AuthenticationService {
         return new JwtAuthenticationResponse(jwt);
     }
 
-    /**
-     * Аутентификация пользователя
-     *
-     * @param request данные пользователя
-     * @return токен
-     */
-    public JwtAuthenticationResponse signIn(SignInRequest request) {
-        String username = userService.getByEmail(request.getEmail()).getUsername();
+    public JwtAuthenticationResponse signIn(SignInRequest request, boolean isWeb) {
+        String username = getUsernameByEmail(request.getEmail());
 
-        if (username.isEmpty()) {
-            System.out.println("Username invalid");
+        if (username == null) {
+            throw new UsernameNotFoundException("Неверный email или пароль");
+        }
+
+        var user = userService
+                .userDetailsService()
+                .loadUserByUsername(username);
+
+        if (isWeb && !user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            throw new AccessDeniedException("Доступ запрещен");
         }
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -107,12 +123,12 @@ public class AuthenticationService {
                 request.getPassword()
         ));
 
-        var user = userService
-                .userDetailsService()
-                .loadUserByUsername(username);
-
         var jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);
     }
 
+    public User getUserFromToken(String token) {
+        String username = jwtService.extractUserName(token.replace("Bearer", ""));
+        return userService.getByUsername(username);
+    }
 }

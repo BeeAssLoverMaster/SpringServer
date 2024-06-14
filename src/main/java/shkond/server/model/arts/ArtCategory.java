@@ -15,10 +15,8 @@ public class ArtCategory {
     @Column(name = "category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "category_name", nullable = true)
     private String  name;
-
     @Column(name = "category_image", nullable = true)
     private String image;
 }

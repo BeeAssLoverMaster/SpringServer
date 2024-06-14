@@ -15,10 +15,9 @@ public class ArtGenre {
     private Long id;
     @Column(name = "genre_name", nullable = true)
     private String name;
-
     @Column(name = "genre_image", nullable = true)
     private String image;
-
+    /* Отношение "многие-к-одному" между ArtGenre и ArtType */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "art_type_id")
     private ArtType artType;

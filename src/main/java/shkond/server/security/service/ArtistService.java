@@ -9,10 +9,8 @@ import java.util.List;
 
 @Service
 public class ArtistService {
-
     @Autowired
     private ArtistRepository artistRepository;
-
     public List<Artist> getAllArtists() {
         return artistRepository.findAll();
     }

@@ -24,7 +24,6 @@ import java.util.Optional;
 public class ArticleImageController {
     @Autowired
     private ArticleRepository articleRepository;
-
     @Autowired
     private ArticleImageRepository articleImageRepository;
 
@@ -33,14 +32,11 @@ public class ArticleImageController {
     public ResponseEntity<?> getAllArticleImagesByArticleId(@RequestParam(name = "articleId") Long articleId) {
         Optional<Article> article = articleRepository.findById(articleId);
         Optional<ArticleImage> articleImage = articleImageRepository.findById(article.get().getId());
-
         List<ArticleImage> articleImageList = articleImageRepository.findAllByArticleId(articleImage.get().getId());
-
-        System.out.println(article);
-
         JsonObject mainJsonObject = new JsonObject();
 
-        String imageUrl = "http://10.0.2.2:8080/api/image/article/";
+//        String imageUrl = "http://10.0.2.2:8080/api/image/article/";
+        String imageUrl = "http://192.168.1.6:8080/api/image/article/";
 
         JsonArray jsonArray = new JsonArray();
 

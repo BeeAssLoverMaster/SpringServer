@@ -18,67 +18,35 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api")
+/* Контроллер для типов искусства */
 public class ArtTypeController {
     @Autowired
     ArtTypeRepository artTypeRepository;
-
     @Autowired
     ArtCategoryRepository artCategoryRepository;
+    private final String IMAGE_URL = "http://192.168.1.6:8080/api/image/asset/";
 
-    private final String IMAGE_URL = "http://10.0.2.2:8080/api/image/asset/";
-
-    /* Никем не используется */
-    @GetMapping("/types/get_all")
-    public ResponseEntity<?> getAllTypes() {
-        List<ArtType> typeList = artTypeRepository.findAll();
-
-        JsonObject mainJsonObject = new JsonObject();
-        JsonArray jsonArray = new JsonArray();
-
-        for (ArtType type : typeList) {
-            JsonObject jsonObject = new JsonObject();
-
-            jsonObject.addProperty("id", type.getId());
-            jsonObject.addProperty("typeName", type.getName());
-            jsonObject.addProperty("imageName", IMAGE_URL + type.getName() + ".png");
-            jsonObject.addProperty("artCategory", type.getArtCategory().getId());
-
-            jsonArray.add(jsonObject);
-        }
-
-        mainJsonObject.add("types", jsonArray); // Добавляем массив в основной JsonObject
-
-        String jsonString = mainJsonObject.toString();
-
-        return ResponseEntity.ok(jsonString);
-    }
-
-    /* Web:
-    * ArticleAndQuiz
-    */
+    /**
+     * Получение типов искусства по идентификатору категории искусства
+     * @param categoryId
+     * @return JSON-объект, содержащий идентификатор, название, изображение типа искусства и идентификатор категории искусства
+     */
     @GetMapping("/types/get")
     public ResponseEntity<?> getTypesByCategoryId(@RequestParam(name = "categoryId") Long categoryId) {
         List<ArtType> typeList = artTypeRepository.findAllByArtCategoryId(categoryId);
-
-
         JsonArray jsonArray = new JsonArray();
         JsonObject mainJsonObject = new JsonObject();
         for (ArtType type : typeList) {
             JsonObject jsonObject = new JsonObject();
-
             jsonObject.addProperty("id", type.getId());
             jsonObject.addProperty("typeName", type.getName());
-            jsonObject.addProperty("imageName", IMAGE_URL + type.getName() + ".png");
+            jsonObject.addProperty("imageName", IMAGE_URL + type.getImage() + ".png");
             jsonObject.addProperty("artCategory", type.getArtCategory().getId());
-
             jsonArray.add(jsonObject);
         }
-
-        mainJsonObject.add("types", jsonArray); // Добавляем массив в основной JsonObject
-
+        mainJsonObject.add("types", jsonArray);
         String jsonString = mainJsonObject.toString();
-
         return ResponseEntity.ok(jsonString);
-
     }
 }
+

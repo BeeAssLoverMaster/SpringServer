@@ -5,11 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Data
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+/* Данные для добавления вопроса*/
 public class AddQuestionRequest {
     private String question;
     private Integer questionValue;

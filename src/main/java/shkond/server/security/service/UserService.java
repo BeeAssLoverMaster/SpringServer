@@ -22,21 +22,11 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
-    /**
-     * Сохранение пользователя
-     *
-     * @return сохраненный пользователь
-     */
+
     public User save(User user) {
         return userRepository.save(user);
     }
 
-
-    /**
-     * Создание пользователя
-     *
-     * @return созданный пользователь
-     */
     public User create(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             // Заменить на свои исключения
@@ -50,11 +40,6 @@ public class UserService {
         return save(user);
     }
 
-    /**
-     * Получение пользователя по имени пользователя
-     *
-     * @return пользователь
-     */
     public User getByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
@@ -67,45 +52,13 @@ public class UserService {
 
     }
 
-    /**
-     * Получение пользователя по имени пользователя
-     * <p>
-     * Нужен для Spring Security
-     *
-     * @return пользователь
-     */
     public UserDetailsService userDetailsService() {
         return this::getByUsername;
     }
 
-    /**
-     * Получение текущего пользователя
-     *
-     * @return текущий пользователь
-     */
     public User getCurrentUser() {
         // Получение имени пользователя из контекста Spring Security
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         return getByUsername(username);
-    }
-
-
-    /**
-     * Выдача прав администратора текущему пользователю
-     * <p>
-     * Нужен для демонстрации
-     */
-    @Deprecated
-    public void getAdmin() {
-        List<Role> rolesList = new ArrayList<>();
-
-        Role userRole = roleRepository.findByRole(EnumRole.ROLE_ADMIN)
-                .orElseThrow(() -> new RuntimeException("Роль не найдена"));
-
-        var user = getCurrentUser();
-        rolesList = user.getRoles();
-        rolesList.add(userRole);
-        user.setRoles(rolesList);
-        save(user);
     }
 }

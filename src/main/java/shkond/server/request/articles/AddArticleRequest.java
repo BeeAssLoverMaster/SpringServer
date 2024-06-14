@@ -6,12 +6,11 @@ import shkond.server.model.articles.ArticleCategory;
 import shkond.server.model.arts.ArtGenre;
 
 import java.util.List;
-
-@Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+/* Данные для добавления статьи в БД */
 public class AddArticleRequest {
     private String title;
     private String text;

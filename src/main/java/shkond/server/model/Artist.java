@@ -16,24 +16,20 @@ import java.util.List;
 @Table(name = "artists")
 public class Artist {
     public Artist(){};
-
     public Artist(String name, String image, Article article) {
         this.name = name;
         this.image = image;
         this.article = article;
     }
-
     @Id
     @Column(name = "artist_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "artist_name", nullable = true)
     private String name;
-
     @Column(name = "artist_image", nullable = true)
     private String image;
-
+    /* Отношение "один-к-одному" между Artist и Article */
     @OneToOne
     @JoinColumn(name = "article_id", referencedColumnName = "article_id")
     private Article article;

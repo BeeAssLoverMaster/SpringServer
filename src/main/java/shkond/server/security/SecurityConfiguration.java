@@ -38,7 +38,6 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-
     @Value("${image.articles-dir}")
     private String articlesDir;
     @Value("${image.artists-dir}")
@@ -99,6 +98,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .authorizeHttpRequests(request -> request
                         // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
                         .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/user/**").authenticated() //Тестится
                         .requestMatchers("/endpoint", "/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

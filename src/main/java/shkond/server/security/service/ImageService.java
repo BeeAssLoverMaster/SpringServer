@@ -16,10 +16,6 @@ import java.util.UUID;
 @Service
 public class ImageService {
 
-    /**
-     * Сохраняет в каталоге изображение в формате .png
-     * @return urlName
-     */
     public String saveImage(MultipartFile file, String uploadDir) {
         try {
             String encodeFileName = UUID.randomUUID().toString() + ".png";

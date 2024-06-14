@@ -50,7 +50,6 @@ public class QuizService {
     private AnswerRepository answerRepository;
     @Autowired
     private QuestionImageRepository questionImageRepository;
-
     @Value("${image.articles-dir}")
     private String assetDir;
 
@@ -135,5 +134,4 @@ public class QuizService {
 
         return true;
     }
-
 }
