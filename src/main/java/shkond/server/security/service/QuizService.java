@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import shkond.server.model.Artist;
 import shkond.server.model.articles.Article;
 import shkond.server.model.articles.ArticleCategory;
 import shkond.server.model.articles.ArticleImage;
@@ -97,11 +98,23 @@ public class QuizService {
         return quizRepository.save(quiz);
     }
 
-    public Boolean addQuestions(
-            MultipartFile[] files,
+    public Quiz createQuiz(Article article, Artist artist) {
+
+        Quiz quiz = new Quiz(
+                article.getArtGenre(),
+                article,
+                artist
+        );
+
+        return quizRepository.save(quiz);
+    }
+
+    public void addQuestions(
             AddQuestionRequest[] questionRequestsList,
-            Quiz quiz
+            Quiz quiz,
+            MultipartFile[] questionFiles  // Добавьте этот параметр
     ) {
+        int fileIndex = 0;
         for (AddQuestionRequest request : questionRequestsList) {
             Question question = new Question(
                     request.getQuestion(),
@@ -112,7 +125,6 @@ public class QuizService {
             Question savedQuestion = questionRepository.save(question);
 
             for (AnswerRequest answerReq : request.getAnswerRequestList()) {
-
                 Answer answer = new Answer(
                         savedQuestion,
                         answerReq.getAnswer(),
@@ -122,16 +134,15 @@ public class QuizService {
                 answerRepository.save(answer);
             }
 
-            if (files != null && files.length > 0) {
-                for (MultipartFile file : files) {
-                    String imageName = imageService.saveImage(file, questionDir);
-
-                    QuestionImage image = new QuestionImage(savedQuestion, imageName);
-                    questionImageRepository.save(image);
-                }
+            // Сохранение изображений
+            if (fileIndex < questionFiles.length && questionFiles[fileIndex] != null && !questionFiles[fileIndex].isEmpty()) {
+                String imageName = imageService.saveImage(questionFiles[fileIndex], questionDir);
+                QuestionImage image = new QuestionImage(savedQuestion, imageName);
+                questionImageRepository.save(image);
+                fileIndex++;
             }
         }
-
-        return true;
     }
+
+
 }

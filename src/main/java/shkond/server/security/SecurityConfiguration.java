@@ -46,6 +46,10 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     private String assetsDir;
     @Value("${image.profiles-dir}")
     private String profilesDir;
+    @Value("${image.teachers-dir}")
+    private String teacherDir;
+    @Value("${image.schools-dir}")
+    private String schoolDir;
     @Value("${image.questions-dir}")
     private String questionsDir;
     @Value("${image.utils-dir}")
@@ -56,6 +60,8 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/api/image/article/**").addResourceLocations("file:" + articlesDir + "/");
         registry.addResourceHandler("/api/image/artist/**").addResourceLocations("file:" + artistsDir + "/");
+        registry.addResourceHandler("/api/image/teacher/**").addResourceLocations("file:" + teacherDir + "/");
+        registry.addResourceHandler("/api/image/school/**").addResourceLocations("file:" + schoolDir + "/");
         registry.addResourceHandler("/api/image/asset/**").addResourceLocations("file:" + assetsDir + "/");
         registry.addResourceHandler("/api/image/profile/**").addResourceLocations("file:" + profilesDir + "/");
         registry.addResourceHandler("/api/image/question/**").addResourceLocations("file:" + questionsDir + "/");

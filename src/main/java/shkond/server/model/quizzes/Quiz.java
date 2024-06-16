@@ -33,4 +33,9 @@ public class Quiz {
         this.artGenre = artGenre;
         this.article = article;
     }
+    public Quiz(ArtGenre artGenre, Article article, Artist artist) {
+        this.artGenre = artGenre;
+        this.article = article;
+        this.artist = artist;
+    }
 }

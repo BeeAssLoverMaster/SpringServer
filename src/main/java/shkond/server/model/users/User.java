@@ -41,6 +41,8 @@ public class User implements UserDetails {
     private ArtCategory artCategory;
     @Column(name = "points")
     private int points;
+    @Column(name = "correct_answers")
+    private int correctAnswers;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -60,12 +62,13 @@ public class User implements UserDetails {
         return authorities;
     }
 
-    public User(String username, String email, String password, String image, int points, List<Role> roles, ArtCategory artCategory) {
+    public User(String username, String email, String password, String image, int points, int correctAnswers, List<Role> roles, ArtCategory artCategory) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.image = image;
         this.points = points;
+        this.correctAnswers = correctAnswers;
         this.roles = roles;
         this.artCategory = artCategory;
     }

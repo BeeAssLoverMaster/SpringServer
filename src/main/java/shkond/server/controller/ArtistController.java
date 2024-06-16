@@ -71,7 +71,7 @@ public class ArtistController {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("id", artist.getId());
             jsonObject.addProperty("artistName", artist.getName());
-            jsonObject.addProperty("artistImage", artist.getImage());
+            jsonObject.addProperty("artistImage", ARTIST_IMAGE_URL + artist.getImage());
             jsonObject.addProperty("articleId", artist.getArticle().getId());
             List<Quiz> quizList = quizRepository.findAllByArtistId(artist.getId());
             JsonArray jsonArrayQuizzes = new JsonArray();
@@ -179,7 +179,7 @@ public class ArtistController {
     }
 
     /**
-     * Получение представителя по идентификатору
+     * Добавление представителя
      * @param profileImageFile изображение представителя
      * @param bioImageFiles массив изображений статьи
      * @param addArticleRequest запрос на добавление статьи
@@ -202,11 +202,7 @@ public class ArtistController {
         artistRepository.save(artist);
         return ResponseEntity.ok("Представитель добавлен!");
     }
-    /**
-     * Получение представителя по идентификатору
-     * @param request запрос на добавление представителя
-     * @return JSON-объект с данными представителя
-     */
+
     @PostMapping(value = "/artist/update")
     public ResponseEntity<?> updateArtist(@RequestPart(name = "request") AddArtistRequest request,
                                           @RequestPart("file") MultipartFile file) {

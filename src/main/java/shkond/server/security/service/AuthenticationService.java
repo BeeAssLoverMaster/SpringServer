@@ -93,6 +93,7 @@ public class AuthenticationService {
                 passwordEncoder.encode(request.getPassword()),
                 defaultImage,
                 0,
+                0,
                 rolesList,
                 artCategory
                 );

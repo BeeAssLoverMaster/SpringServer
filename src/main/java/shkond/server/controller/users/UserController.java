@@ -1,5 +1,6 @@
 package shkond.server.controller.users;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +13,19 @@ import shkond.server.model.arts.ArtCategory;
 import shkond.server.model.quizzes.Quiz;
 import shkond.server.model.users.Result;
 import shkond.server.model.users.ResultId;
+import shkond.server.model.users.Role;
 import shkond.server.model.users.User;
 import shkond.server.repository.arts.ArtCategoryRepository;
 import shkond.server.repository.quizzes.QuizRepository;
 import shkond.server.repository.users.ResultRepository;
+import shkond.server.repository.users.RoleRepository;
 import shkond.server.repository.users.UserRepository;
+import shkond.server.request.users.UpdateUserRolesRequest;
 import shkond.server.security.service.ImageService;
 import shkond.server.security.service.UserService;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -36,6 +41,8 @@ public class UserController {
     private ArtCategoryRepository artCategoryRepository;
     @Autowired
     private QuizRepository quizRepository;
+    @Autowired
+    private RoleRepository roleRepository;
     @Autowired
     private ImageService imageService;
     @Autowired
@@ -62,8 +69,58 @@ public class UserController {
             jsonObject.addProperty("artCategory", artCategory.get().getId());
         }
         jsonObject.addProperty("points", user.getPoints());
+        jsonObject.addProperty("correctAnswers", user.getCorrectAnswers());
         String jsonString = jsonObject.toString();
         return ResponseEntity.ok(jsonString);
+    }
+
+    /**
+     * Получение всех e-mail пользователей и их ролей
+     * @return JSON-объект с данными профиля
+     */
+    @GetMapping("/users/get_all")
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        JsonArray jsonArray = new JsonArray();
+
+        for (User user : users) {
+            JsonObject userJson = new JsonObject();
+            userJson.addProperty("id", user.getId());
+            userJson.addProperty("username", user.getUsername());
+            userJson.addProperty("email", user.getEmail());
+
+            JsonArray rolesJsonArray = new JsonArray();
+            user.getRoles().forEach(role -> rolesJsonArray.add(role.getRole().name()));
+
+            userJson.add("roles", rolesJsonArray);
+
+            jsonArray.add(userJson);
+        }
+
+        JsonObject mainJsonObject = new JsonObject();
+        mainJsonObject.add("users", jsonArray);
+
+        return ResponseEntity.ok(mainJsonObject.toString());
+    }
+
+    @PutMapping("users/update_roles")
+    public ResponseEntity<?> updateUserRoles(@RequestBody UpdateUserRolesRequest request) {
+        Optional<User> userOptional = userRepository.findById(request.getUserId());
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        User user = userOptional.get();
+        List<Role> newRoles = roleRepository.findAllById(request.getRoleIds());
+
+        if (newRoles.isEmpty()) {
+            return ResponseEntity.badRequest().body("Invalid role IDs");
+        }
+
+        user.setRoles(newRoles);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("User roles updated successfully");
     }
 
     /**
@@ -104,11 +161,13 @@ public class UserController {
      * @param quizId
      * @return ответ сервера о результате операции
      */
-    @PutMapping("/users/add_points/{points}/{quizId}")
-    public ResponseEntity<?> addPointsToUser(@PathVariable Integer points, @PathVariable Long quizId) {
+    @PutMapping("/users/add_points/{points}/{correctAnswers}/{quizId}")
+    public ResponseEntity<?> addPointsToUser(@PathVariable Integer points, @PathVariable Integer correctAnswers,
+                                             @PathVariable Long quizId) {
         User user = userService.getCurrentUser();
         Optional<Quiz> quiz = quizRepository.findById(quizId);
         ResultId resultId = new ResultId(user, quiz.get());
+
         if (resultRepository.existsById(resultId)) {
             Optional<Result> result = resultRepository.findById(resultId);
             if (points > result.get().getResult()) {
@@ -127,7 +186,11 @@ public class UserController {
             userRepository.save(user);
             resultRepository.save(result);
         }
-        return ResponseEntity.ok("Очки зачислены");
+
+        user.setCorrectAnswers(user.getCorrectAnswers() + correctAnswers);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Очки и правильные ответы зачислены");
     }
 }
 

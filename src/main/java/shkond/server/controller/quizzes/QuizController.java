@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import shkond.server.model.Artist;
 import shkond.server.model.articles.Article;
 import shkond.server.model.articles.ArticleImage;
 import shkond.server.model.arts.ArtGenre;
@@ -18,6 +19,7 @@ import shkond.server.model.quizzes.Quiz;
 import shkond.server.model.users.Result;
 import shkond.server.model.users.ResultId;
 import shkond.server.model.users.User;
+import shkond.server.repository.ArtistRepository;
 import shkond.server.repository.article.ArticleImageRepository;
 import shkond.server.repository.article.ArticleRepository;
 import shkond.server.repository.quizzes.QuestionRepository;
@@ -44,6 +46,8 @@ public class QuizController {
     private ArticleRepository articleRepository;
     @Autowired
     private ArticleImageRepository articleImageRepository;
+    @Autowired
+    private ArtistRepository artistRepository;
     @Autowired
     private ResultRepository resultRepository;
     @Autowired
@@ -174,7 +178,6 @@ public class QuizController {
      * Добавление викторины
      * @param articleFiles массив файлов статьи
      * @param articleRequest запрос на добавление статьи
-     * @param questionFiles массив файлов вопросов
      * @param questionRequest запрос на добавление вопросов
      * @return "Статья и тест сохранены!"
      */
@@ -182,12 +185,29 @@ public class QuizController {
     public ResponseEntity<?> addQuiz(
             @RequestPart(value = "articleFiles", required = false) MultipartFile[] articleFiles,
             @RequestPart("articleRequest") AddArticleRequest articleRequest,
-            @RequestPart(value = "questionFiles", required = false) MultipartFile[] questionFiles,
-            @RequestPart("questionRequest") AddQuestionRequest[] questionRequest
+            @RequestPart("questionRequest") AddQuestionRequest[] questionRequest,
+            @RequestPart(value = "questionFiles", required = false) MultipartFile[] questionFiles  // Добавьте этот параметр
     ) {
         Article article = quizService.addArticle(articleFiles, articleRequest);
         Quiz quiz = quizService.createQuiz(article);
-        quizService.addQuestions(questionFiles, questionRequest, quiz);
+        quizService.addQuestions(questionRequest, quiz, questionFiles);  // Передайте questionFiles
+        return ResponseEntity.ok("Статья и тест сохранены!");
+    }
+
+
+
+    @PostMapping("/quiz/add_artist_article")
+    public ResponseEntity<?> addArtistQuiz(
+            @RequestPart(value = "articleFiles", required = false) MultipartFile[] articleFiles,
+            @RequestPart("articleRequest") AddArticleRequest articleRequest,
+            @RequestPart(value = "questionFiles", required = false) MultipartFile[] questionFiles,
+            @RequestPart("questionRequest") AddQuestionRequest[] questionRequest,
+            @RequestParam(name = "artistId") Long artistId
+    ) {
+        Article article = quizService.addArticle(articleFiles, articleRequest);
+        Optional<Artist> artist = artistRepository.findById(artistId);
+        Quiz quiz = quizService.createQuiz(article, artist.get());
+        quizService.addQuestions(questionRequest, quiz, questionFiles);
         return ResponseEntity.ok("Статья и тест сохранены!");
     }
 }
