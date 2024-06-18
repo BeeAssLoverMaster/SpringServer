@@ -1,5 +1,6 @@
 package shkond.server.controller.quizzes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -174,25 +175,33 @@ public class QuizController {
         String jsonString = jsonObject.toString();
         return ResponseEntity.ok(jsonString);
     }
-    /**
-     * Добавление викторины
-     * @param articleFiles массив файлов статьи
-     * @param articleRequest запрос на добавление статьи
-     * @param questionRequest запрос на добавление вопросов
-     * @return "Статья и тест сохранены!"
-     */
+
     @PostMapping("/quiz/add")
     public ResponseEntity<?> addQuiz(
             @RequestPart(value = "articleFiles", required = false) MultipartFile[] articleFiles,
-            @RequestPart("articleRequest") AddArticleRequest articleRequest,
-            @RequestPart("questionRequest") AddQuestionRequest[] questionRequest,
-            @RequestPart(value = "questionFiles", required = false) MultipartFile[] questionFiles  // Добавьте этот параметр
-    ) {
+            @RequestPart("articleRequest") String articleRequestJson,
+            @RequestPart("questionRequest") String questionRequestJson,
+            @RequestPart(value = "questionFiles", required = false) MultipartFile[] questionFiles) {
+
+        ObjectMapper mapper = new ObjectMapper();
+        AddArticleRequest articleRequest;
+        AddQuestionRequest[] questionRequests;
+
+        try {
+            articleRequest = mapper.readValue(articleRequestJson, AddArticleRequest.class);
+            questionRequests = mapper.readValue(questionRequestJson, AddQuestionRequest[].class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Invalid JSON format");
+        }
+
         Article article = quizService.addArticle(articleFiles, articleRequest);
         Quiz quiz = quizService.createQuiz(article);
-        quizService.addQuestions(questionRequest, quiz, questionFiles);  // Передайте questionFiles
+        quizService.addQuestions(questionRequests, quiz, questionFiles);
+
         return ResponseEntity.ok("Статья и тест сохранены!");
     }
+
+
 
 
 

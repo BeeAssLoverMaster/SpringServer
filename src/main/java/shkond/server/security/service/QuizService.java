@@ -112,8 +112,8 @@ public class QuizService {
     public void addQuestions(
             AddQuestionRequest[] questionRequestsList,
             Quiz quiz,
-            MultipartFile[] questionFiles  // Добавьте этот параметр
-    ) {
+            MultipartFile[] questionFiles) {
+
         int fileIndex = 0;
         for (AddQuestionRequest request : questionRequestsList) {
             Question question = new Question(
@@ -134,8 +134,8 @@ public class QuizService {
                 answerRepository.save(answer);
             }
 
-            // Сохранение изображений
-            if (fileIndex < questionFiles.length && questionFiles[fileIndex] != null && !questionFiles[fileIndex].isEmpty()) {
+            // Сохранение изображений, если они есть
+            if (questionFiles != null && fileIndex < questionFiles.length && questionFiles[fileIndex] != null && !questionFiles[fileIndex].isEmpty()) {
                 String imageName = imageService.saveImage(questionFiles[fileIndex], questionDir);
                 QuestionImage image = new QuestionImage(savedQuestion, imageName);
                 questionImageRepository.save(image);
@@ -143,6 +143,7 @@ public class QuizService {
             }
         }
     }
+
 
 
 }
